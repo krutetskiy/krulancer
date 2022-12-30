@@ -1,4 +1,4 @@
-import { Component, useRef, useState } from "react";
+import { Component, useRef, useState, createRef } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
 export enum PriorityType {
@@ -25,7 +25,8 @@ export interface ProjectTaskModel {
 export interface IProps extends ProjectTaskModel { }
 
 export interface IProjectTask extends IProps {
-    onDragTask: (e: DraggableEvent, data: DraggableData) => void
+    onStartDragTask: (e: DraggableEvent, data: DraggableData) => void
+    onStopDragTask: (e: DraggableEvent, data: DraggableData) => void
 }
 
 class ProjectTask extends Component<IProjectTask, any>  {
@@ -39,25 +40,30 @@ class ProjectTask extends Component<IProjectTask, any>  {
                 estimated: props.estimated,
                 priority: props.priority,
                 status: props.status
-            }
+            }, 
+            nodeRef: createRef()
         }
 
-        this.onDragTask = this.onDragTask.bind(this)
+        this.onStartDragTask = this.onStartDragTask.bind(this)
+        this.onStopDragTask = this.onStopDragTask.bind(this)
     }
 
-    onDragTask(e: DraggableEvent, data: DraggableData): void {
+    onStartDragTask(e: DraggableEvent, data: DraggableData): void {
+        data.node.style.zIndex = '50';
+
         const task = this.state.task;
         if (task) {
-            this.props.onDragTask(e, data);
+            this.props.onStartDragTask(e, data);
         }
     }
 
-    onDragStart(e: DraggableEvent, data: DraggableData): void {
-        data.node.style.zIndex = '50';
-    }
-
-    onDragStop(e: DraggableEvent, data: DraggableData): void {
+    onStopDragTask(e: DraggableEvent, data: DraggableData): void {
         data.node.style.zIndex = '0';
+
+        const task = this.state.task;
+        if (task) {
+            this.props.onStopDragTask(e, data);
+        }
     }
 
     getPriorityColor(priority: PriorityType) {
@@ -78,12 +84,11 @@ class ProjectTask extends Component<IProjectTask, any>  {
         const { task, nodeRef } = this.state;
 
         return (
-            <>
-            <Draggable
+        <>
+        <Draggable
             nodeRef={nodeRef}
-            onStart={this.onDragStart}
-            onDrag={this.onDragTask}
-            onStop={this.onDragStop}
+            onStart={this.onStartDragTask}
+            onStop={this.onStopDragTask}
             position={{x: 0, y: 0}}
             >
             <div ref={nodeRef} className="flex flex-col my-1 px-4 py-2 bg-gray-task rounded-2xl cursor-grab">
@@ -101,7 +106,7 @@ class ProjectTask extends Component<IProjectTask, any>  {
                 </div>
             </div>
         </Draggable>
-            </>
+        </>
         )
     }
 }
