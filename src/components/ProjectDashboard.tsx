@@ -26,6 +26,13 @@ const ContainerIdToStatus = (id: string) : StatusType | undefined => {
     }
 }
 
+const displayStatuses = [
+    StatusType.ToDo,
+    StatusType.InProgress,
+    StatusType.Closed,
+    StatusType.Frozen
+]
+
 const ProjectDashboard = () => {
     const data: ProjectTaskModel[] = [
         {
@@ -106,33 +113,22 @@ const ProjectDashboard = () => {
         containers.forEach(container => container.classList.remove("border-cyan-500"))
     }
 
-
     return (
     <>
         <div className="flex flex-col min-h-screen">
           <h1 className="flex m-9 font-mono font-semibold text-4xl">Last mile dev</h1>
           <ProjectDashboardDescription />
           <div id="taskContainers" className="flex justify-between m-9">
-            <ProjectDashboardTaskContainer
-                status={StatusType.ToDo} 
-                tasks={tasks.filter(c => c.status === StatusType.ToDo)} 
-                onDraggingTask={onDraggingTask}
-                onStopDragTask={onStopDragTask}/>
-            <ProjectDashboardTaskContainer 
-                status={StatusType.InProgress} 
-                tasks={tasks.filter(c => c.status === StatusType.InProgress)}
-                onDraggingTask={onDraggingTask}
-                onStopDragTask={onStopDragTask}/>
-            <ProjectDashboardTaskContainer 
-                status={StatusType.Closed} 
-                tasks={tasks.filter(c => c.status === StatusType.Closed)} 
-                onDraggingTask={onDraggingTask}
-                onStopDragTask={onStopDragTask}/>
-            <ProjectDashboardTaskContainer 
-                status={StatusType.Frozen} 
-                tasks={tasks.filter(c => c.status === StatusType.Frozen)} 
-                onDraggingTask={onDraggingTask}
-                onStopDragTask={onStopDragTask}/>
+            {
+                displayStatuses.map(status => 
+                    <ProjectDashboardTaskContainer
+                        key={status}
+                        status={status} 
+                        tasks={tasks.filter(c => c.status === status)} 
+                        onDraggingTask={onDraggingTask}
+                        onStopDragTask={onStopDragTask}/>
+                )
+            }
           </div>
         </div>
     </>
