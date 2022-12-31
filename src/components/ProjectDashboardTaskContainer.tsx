@@ -9,53 +9,37 @@ export interface IProps {
     onStopDragTask: (e: DraggableEvent, data: DraggableData) => void
 }
 
-class ProjectDashboardTaskContainer extends Component<IProps, any> {
-    public status: StatusType;
-    
-    constructor(props: IProps) {
-        super(props);
+const ProjectDashboardTaskContainer = (props: IProps) => {
+    const { status, tasks, onDraggingTask, onStopDragTask } = props;
 
-        this.status = props.status;
-
-        this.state = {
-            tasks: props.tasks,
-        };
-
-        this.onDraggingTask = this.props.onDraggingTask.bind(this);
-        this.onStopDragTask = this.props.onStopDragTask.bind(this);
-    }
-
-    onStartDragTask(e: DraggableEvent, data: DraggableData): void {
+    const handleOnStart = (e: DraggableEvent, data: DraggableData): void => {
         const parent = data.node.parentElement;
         const node = data.node;
         
         if (!parent)
             return;
-
+    
         node.style.zIndex = '50';
     }
-
-    onDraggingTask(e: DraggableEvent, data: DraggableData): void {
-        this.onDraggingTask(e, data);
+    
+    const handleOnDrag = (e: DraggableEvent, data: DraggableData): void => {
+        onDraggingTask(e, data);
     }
-
-    onStopDragTask(e: DraggableEvent, data: DraggableData): void {
+    
+    const handleStopDrag = (e: DraggableEvent, data: DraggableData): void => {
         const parent = data.node.parentElement;
         const node = data.node;
-
+    
         if (!parent)
             return;
-
+    
         node.style.zIndex = '0';
-
-        this.onStopDragTask(e, data);
+    
+        onStopDragTask(e, data);
     }
-
-    render() {
-        const { status, tasks } = this.props;
-
-        return (
-        <>
+    
+    return (
+    <>
         <div id={`${status}`} className="flex flex-col px-5 py-3 border border-white bg-bg-gray-regular rounded-2xl min-h-[650px] w-[24%]">
             <h2 className="font-mono pb-4 font-medium">{status}</h2>
             {
@@ -65,9 +49,9 @@ class ProjectDashboardTaskContainer extends Component<IProps, any> {
                         <Draggable
                             key={i}
                             nodeRef={nodeRef}
-                            onStart={this.onStartDragTask}
-                            onDrag={this.onDraggingTask}
-                            onStop={this.onStopDragTask}
+                            onStart={handleOnStart}
+                            onDrag={handleOnDrag}
+                            onStop={handleStopDrag}
                             position={{x: 0, y: 0}}
                             bounds="body"
                         >
@@ -76,18 +60,16 @@ class ProjectDashboardTaskContainer extends Component<IProps, any> {
                                     title={task.title} 
                                     assigned={task.assigned} 
                                     estimated={task.estimated} 
-                                    priority={task.priority} 
-                                    status={task.status}/>
+                                    priority={task.priority}/>
                             </div>
                         </Draggable>
                     )
                 }
                 )
             }
-        </div> 
+            </div> 
         </>
     )
-    }
 }
 
 export default ProjectDashboardTaskContainer;
