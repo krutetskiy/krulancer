@@ -27,6 +27,51 @@ const ContainerIdToStatus = (id: string) : StatusType | undefined => {
 }
 
 const ProjectDashboard = () => {
+    const data: ProjectTaskModel[] = [
+        {
+            id: 1,
+            title: "FMS",
+            priority: PriorityType.High,
+            estimated: 40,
+            assigned: "Krutetskiy",
+            status: StatusType.ToDo
+        },
+        {
+            id: 2,
+            title: "FMS",
+            priority: PriorityType.High,
+            estimated: 40,
+            assigned: "Krutetskiy",
+            status: StatusType.Closed
+        },
+        {
+            id: 3,
+            title: "WMS",
+            priority: PriorityType.Medium,
+            estimated: 13,
+            assigned: "Krutetskiy",
+            status: StatusType.InProgress
+        },
+        {
+            id: 4,
+            title: "OMS",
+            priority: PriorityType.Low,
+            estimated: 7,
+            assigned: "Krutetskiy",
+            status: StatusType.Frozen
+        },
+        {
+            id: 5,
+            title: "WHC",
+            priority: PriorityType.Low,
+            estimated: 8,
+            assigned: "Krutetskiy",
+            status: StatusType.InProgress
+        },
+    ]
+    
+    const [tasks, setTasks] = useState(data)
+
     const onDraggingTask = (e: DraggableEvent, data: DraggableData) : void => {
         const containers =  [...document.querySelector("#taskContainers")?.children!];
         const mouseEvent = window.event as MouseEvent;
@@ -43,58 +88,24 @@ const ProjectDashboard = () => {
     const onStopDragTask = (e: DraggableEvent, data: DraggableData) : void => {
         const containers = [...document.querySelector("#taskContainers")?.children!];
         const mouseEvent = window.event as MouseEvent;
-        console.log(data.node)
-
+       
         const target = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
         const status = ContainerIdToStatus(target?.id!);
-        console.log(status)
+
+        if (!status) return
+
+        const updatedTasks = tasks.map(task => {
+            if (task.id?.toString() === data.node.id)
+                task.status = status
+        
+            return task;
+        })
+
+        setTasks(updatedTasks)
+
         containers.forEach(container => container.classList.remove("border-cyan-500"))
     }
 
-    const data: ProjectTaskModel[] = [
-            {
-                id: 1,
-                title: "FMS",
-                priority: PriorityType.High,
-                estimated: 40,
-                assigned: "Krutetskiy",
-                status: StatusType.ToDo
-            },
-            {
-                id: 2,
-                title: "FMS",
-                priority: PriorityType.High,
-                estimated: 40,
-                assigned: "Krutetskiy",
-                status: StatusType.Closed
-            },
-            {
-                id: 3,
-                title: "WMS",
-                priority: PriorityType.Medium,
-                estimated: 13,
-                assigned: "Krutetskiy",
-                status: StatusType.InProgress
-            },
-            {
-                id: 4,
-                title: "OMS",
-                priority: PriorityType.Low,
-                estimated: 7,
-                assigned: "Krutetskiy",
-                status: StatusType.Frozen
-            },
-            {
-                id: 5,
-                title: "WHC",
-                priority: PriorityType.Low,
-                estimated: 8,
-                assigned: "Krutetskiy",
-                status: StatusType.InProgress
-            },
-    ]
-
-    const [tasks, setTasks] = useState(data)
 
     return (
     <>
