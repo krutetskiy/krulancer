@@ -14,6 +14,7 @@ export enum StatusType {
 }
 
 export interface ProjectTaskModel {
+    id?: number,
     title: string,
     assigned: string,
     estimated: number,

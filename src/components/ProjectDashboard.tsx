@@ -1,40 +1,59 @@
 import ProjectDashboardDescription from "./ProjectDashboardDescription";
-import { Component, ReactNode, useState, useRef, useEffect } from "react";
 import ProjectDashboardTaskContainer from "./ProjectDashboardTaskContainer";
 import { PriorityType, ProjectTaskModel, StatusType } from "./ProjectTask";
 import { DraggableData, DraggableEvent } from "react-draggable";
+import { useState } from "react";
+
+const MouseOverlap = (mouseEvent: MouseEvent, bounds: DOMRect) => {
+    return (
+        mouseEvent.pageY > bounds.top && 
+        mouseEvent.pageY < bounds.top + bounds.height && 
+        mouseEvent.pageX > bounds.left && 
+        mouseEvent.pageX < bounds.left + bounds.width
+    )
+}
+
+const ContainerIdToStatus = (id: string) : StatusType | undefined => {
+    switch (id) {
+        case "To Do":
+            return StatusType.ToDo;
+        case "In Progress":
+            return StatusType.InProgress;
+        case "Closed":
+            return StatusType.Closed;
+        case "Frozen":
+            return StatusType.Frozen;
+    }
+}
 
 const ProjectDashboard = () => {
-    const nodeRef = useRef(null)
-
     const onDraggingTask = (e: DraggableEvent, data: DraggableData) : void => {
-        const taskContainers = document.querySelector("#taskContainers")?.children;
+        const containers =  [...document.querySelector("#taskContainers")?.children!];
         const mouseEvent = window.event as MouseEvent;
 
-        for (let i = 0; i < taskContainers!.length; i++) {
-            const containerElement = taskContainers![i]
-            const container = containerElement?.getBoundingClientRect()!
-
-            if (mouseEvent.pageY > container.top && 
-                mouseEvent.pageY < container.top + container.height && 
-                mouseEvent.pageX > container.left && 
-                mouseEvent.pageX < container.left + container.width)
-            {
-                containerElement?.classList.add("border-cyan-500")
-            }
-            else {
-                containerElement?.classList.remove("border-cyan-500")
-            }
-        }
+        containers.forEach(container => {
+            var bounds = container.getBoundingClientRect()
+            if (MouseOverlap(mouseEvent, bounds))
+                container?.classList.add("border-cyan-500")
+            else 
+                container?.classList.remove("border-cyan-500")
+        })        
     }
 
-    function onStopDragTask(e: DraggableEvent, data: DraggableData) : void {
-        const taskContainers = document.querySelector("#taskContainers")?.children;
-    
+    const onStopDragTask = (e: DraggableEvent, data: DraggableData) : void => {
+        const containers = [...document.querySelector("#taskContainers")?.children!];
+        const mouseEvent = window.event as MouseEvent;
+        console.log(data.node)
+
+        const target = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
+        const status = ContainerIdToStatus(target?.id!);
+        console.log(status)
+        containers.forEach(container => container.classList.remove("border-cyan-500"))
     }
 
-    const tasks: ProjectTaskModel[] = [
+    const data: ProjectTaskModel[] = [
             {
+                id: 1,
                 title: "FMS",
                 priority: PriorityType.High,
                 estimated: 40,
@@ -42,6 +61,7 @@ const ProjectDashboard = () => {
                 status: StatusType.ToDo
             },
             {
+                id: 2,
                 title: "FMS",
                 priority: PriorityType.High,
                 estimated: 40,
@@ -49,6 +69,7 @@ const ProjectDashboard = () => {
                 status: StatusType.Closed
             },
             {
+                id: 3,
                 title: "WMS",
                 priority: PriorityType.Medium,
                 estimated: 13,
@@ -56,6 +77,7 @@ const ProjectDashboard = () => {
                 status: StatusType.InProgress
             },
             {
+                id: 4,
                 title: "OMS",
                 priority: PriorityType.Low,
                 estimated: 7,
@@ -63,21 +85,24 @@ const ProjectDashboard = () => {
                 status: StatusType.Frozen
             },
             {
+                id: 5,
                 title: "WHC",
                 priority: PriorityType.Low,
                 estimated: 8,
                 assigned: "Krutetskiy",
-                status: StatusType.Frozen
+                status: StatusType.InProgress
             },
     ]
+
+    const [tasks, setTasks] = useState(data)
 
     return (
     <>
         <div className="flex flex-col min-h-screen">
           <h1 className="flex m-9 font-mono font-semibold text-4xl">Last mile dev</h1>
           <ProjectDashboardDescription />
-          <div id="taskContainers" ref={nodeRef} className="flex justify-between m-9">
-            <ProjectDashboardTaskContainer 
+          <div id="taskContainers" className="flex justify-between m-9">
+            <ProjectDashboardTaskContainer
                 status={StatusType.ToDo} 
                 tasks={tasks.filter(c => c.status === StatusType.ToDo)} 
                 onDraggingTask={onDraggingTask}

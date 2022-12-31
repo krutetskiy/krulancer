@@ -10,15 +10,14 @@ export interface IProps {
 }
 
 class ProjectDashboardTaskContainer extends Component<IProps, any> {
-    private nodeRef: React.RefObject<HTMLInputElement>;
+    public status: StatusType;
     
     constructor(props: IProps) {
         super(props);
 
-        this.nodeRef = createRef();
+        this.status = props.status;
 
         this.state = {
-            status: props.status,
             tasks: props.tasks,
         };
 
@@ -61,16 +60,18 @@ class ProjectDashboardTaskContainer extends Component<IProps, any> {
             <h2 className="font-mono pb-4 font-medium">{status}</h2>
             {
                 tasks?.map((task, i) => {
+                    const nodeRef : React.RefObject<HTMLDivElement> = createRef()
                     return (
                         <Draggable
                             key={i}
-                            nodeRef={this.nodeRef}
+                            nodeRef={nodeRef}
                             onStart={this.onStartDragTask}
                             onDrag={this.onDraggingTask}
                             onStop={this.onStopDragTask}
                             position={{x: 0, y: 0}}
+                            bounds="body"
                         >
-                            <div ref={this.nodeRef}>
+                            <div id={`${task.id}`} ref={nodeRef}>
                                 <ProjectTask 
                                     title={task.title} 
                                     assigned={task.assigned} 
