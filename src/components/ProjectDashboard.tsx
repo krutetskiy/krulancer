@@ -3,17 +3,18 @@ import ProjectDashboardTaskContainer from "./ProjectDashboardTaskContainer";
 import { PriorityType, ProjectTaskModel, StatusType } from "./ProjectTask";
 import { DraggableData, DraggableEvent } from "react-draggable";
 import { useState } from "react";
+import { trpc } from "../utils/trpc";
 
 const MouseOverlap = (mouseEvent: MouseEvent, bounds: DOMRect) => {
     return (
-        mouseEvent.pageY > bounds.top && 
-        mouseEvent.pageY < bounds.top + bounds.height && 
-        mouseEvent.pageX > bounds.left && 
+        mouseEvent.pageY > bounds.top &&
+        mouseEvent.pageY < bounds.top + bounds.height &&
+        mouseEvent.pageX > bounds.left &&
         mouseEvent.pageX < bounds.left + bounds.width
     )
 }
 
-const ContainerIdToStatus = (id: string) : StatusType | undefined => {
+const ContainerIdToStatus = (id: string): StatusType | undefined => {
     switch (id) {
         case "To Do":
             return StatusType.ToDo;
@@ -76,26 +77,26 @@ const ProjectDashboard = () => {
             status: StatusType.InProgress
         },
     ]
-    
+
     const [tasks, setTasks] = useState(data)
 
-    const onDraggingTask = (e: DraggableEvent, data: DraggableData) : void => {
-        const containers =  [...document.querySelector("#taskContainers")?.children!];
+    const onDraggingTask = (e: DraggableEvent, data: DraggableData): void => {
+        const containers = [...document.querySelector("#taskContainers")?.children!];
         const mouseEvent = window.event as MouseEvent;
 
         containers.forEach(container => {
             var bounds = container.getBoundingClientRect()
             if (MouseOverlap(mouseEvent, bounds))
                 container?.classList.add("border-cyan-500")
-            else 
+            else
                 container?.classList.remove("border-cyan-500")
-        })        
+        })
     }
 
-    const onStopDragTask = (e: DraggableEvent, data: DraggableData) : void => {
+    const onStopDragTask = (e: DraggableEvent, data: DraggableData): void => {
         const containers = [...document.querySelector("#taskContainers")?.children!];
         const mouseEvent = window.event as MouseEvent;
-       
+
         const target = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
         const status = ContainerIdToStatus(target?.id!);
 
@@ -104,7 +105,7 @@ const ProjectDashboard = () => {
         const updatedTasks = tasks.map(task => {
             if (task.id?.toString() === data.node.id)
                 task.status = status
-        
+
             return task;
         })
 
@@ -113,25 +114,29 @@ const ProjectDashboard = () => {
         containers.forEach(container => container.classList.remove("border-cyan-500"))
     }
 
+    const project = trpc.projects.getById.useQuery({
+        id: 1
+    }).data;
+
     return (
-    <>
-        <div className="flex flex-col min-h-screen">
-          <h1 className="flex m-9 font-mono font-semibold text-4xl">Last mile dev</h1>
-          <ProjectDashboardDescription />
-          <div id="taskContainers" className="flex justify-between m-9">
-            {
-                displayStatuses.map(status => 
-                    <ProjectDashboardTaskContainer
-                        key={status}
-                        status={status} 
-                        tasks={tasks.filter(c => c.status === status)} 
-                        onDraggingTask={onDraggingTask}
-                        onStopDragTask={onStopDragTask}/>
-                )
-            }
-          </div>
-        </div>
-    </>
+        <>
+            <div className="flex flex-col min-h-screen">
+                <h1 className="flex m-9 font-mono font-semibold text-4xl">{project?.name ?? 'Unknown'}</h1>
+                <ProjectDashboardDescription />
+                <div id="taskContainers" className="flex justify-between m-9">
+                    {
+                        displayStatuses.map(status =>
+                            <ProjectDashboardTaskContainer
+                                key={status}
+                                status={status}
+                                tasks={tasks.filter(c => c.status === status)}
+                                onDraggingTask={onDraggingTask}
+                                onStopDragTask={onStopDragTask} />
+                        )
+                    }
+                </div>
+            </div>
+        </>
     )
 }
 
