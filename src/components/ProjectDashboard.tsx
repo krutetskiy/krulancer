@@ -122,7 +122,10 @@ const ProjectDashboard = () => {
         <>
             <div className="flex flex-col min-h-screen">
                 <h1 className="flex m-9 font-mono font-semibold text-4xl">{project?.name ?? 'Unknown'}</h1>
-                <ProjectDashboardDescription />
+                <ProjectDashboardDescription
+                    startedAt={project?.started_at}
+                    plannedEnd={project?.planned_end}
+                    starteBy={'Semyn'} />
                 <div id="taskContainers" className="flex justify-between m-9">
                     {
                         displayStatuses.map(status =>
