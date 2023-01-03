@@ -7,13 +7,14 @@ import { TaskStatusType } from "@prisma/client";
 export interface IProps {
     title: string,
     status: TaskStatusType,
+    isActive: boolean,
     tasks: Task[] | undefined,
     onDraggingTask: (e: DraggableEvent, data: DraggableData) => void,
     onStopDragTask: (e: DraggableEvent, data: DraggableData) => void
 }
 
 const ProjectDashboardTaskContainer = (props: IProps) => {
-    const { status, title, tasks, onDraggingTask, onStopDragTask } = props;
+    const { status, title, isActive, tasks, onDraggingTask, onStopDragTask } = props;
 
     const handleOnStart = (e: DraggableEvent, data: DraggableData): void => {
         const parent = data.node.parentElement;
@@ -43,7 +44,7 @@ const ProjectDashboardTaskContainer = (props: IProps) => {
 
     return (
         <>
-            <div id={`${status}`} className="flex flex-col px-5 py-3 border border-white bg-bg-gray-regular rounded-2xl min-h-[650px] w-[24%]">
+            <div id={`${status}`} className={`flex flex-col px-5 py-3 border ${isActive ? 'border-cyan-500' : 'border-white'} bg-bg-gray-regular rounded-2xl min-h-[650px] w-[24%]`}>
                 <h2 className="font-mono pb-4 font-medium">{title}</h2>
                 {
                     tasks?.map((task, i) => {

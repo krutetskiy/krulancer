@@ -34,6 +34,7 @@ const ProjectDashboard = () => {
     }).data
 
     const [dragTask, setDragTask] = useState<Task>();
+    const [activeStatusbar, setActiveStatusbar] = useState<string>()
 
     trpc.tasks.updateTaskStatus.useQuery({
         taskId: dragTask?.id,
@@ -41,20 +42,18 @@ const ProjectDashboard = () => {
     })
 
     const onDraggingTask = (e: DraggableEvent, data: DraggableData): void => {
-        const containers = [...document.querySelector("#taskContainers")?.children!];
+        const containers = [...document.querySelector("#taskContainers")?.children!] as HTMLElement[];
         const mouseEvent = window.event as MouseEvent;
 
         containers.forEach(container => {
             var bounds = container.getBoundingClientRect()
             if (MouseOverlap(mouseEvent, bounds))
-                container?.classList.add("border-cyan-500")
-            else
-                container?.classList.remove("border-cyan-500")
+                setActiveStatusbar(() => container.id)
         })
     }
 
     const onStopDragTask = (e: DraggableEvent, data: DraggableData): void => {
-        const containers = [...document.querySelector("#taskContainers")?.children!];
+        const containers = [...document.querySelector("#taskContainers")?.children!] as HTMLElement[];
         const mouseEvent = window.event as MouseEvent;
 
         const targetElement = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
@@ -68,7 +67,7 @@ const ProjectDashboard = () => {
             setDragTask(targetTask)
         }
 
-        containers.forEach(container => container.classList.remove("border-cyan-500"))
+        setActiveStatusbar(() => undefined)
     }
 
     return (
@@ -87,6 +86,7 @@ const ProjectDashboard = () => {
                                 key={status}
                                 title={title}
                                 status={status}
+                                isActive={status.toString() === activeStatusbar}
                                 tasks={project?.tasks?.filter(c => c.status === status)}
                                 onDraggingTask={onDraggingTask}
                                 onStopDragTask={onStopDragTask} />
