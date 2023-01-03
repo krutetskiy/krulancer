@@ -19,8 +19,41 @@ model projects {
   name        String
   started_at  DateTime @db.Date
   planned_end DateTime @db.Date
+  description String
+  started_by  String
+  tasks       tasks[]
 
   @@map("project")
+}
+
+model tasks {
+  id         Int              @id @default(autoincrement())
+  title      String
+  priority   TaskPriorityType
+  status     TaskStatusType
+  assigned   String
+  estimated  Int
+  project    projects?        @relation(fields: [project_id], references: [id])
+  project_id Int?
+
+  @@map("task")
+}
+
+enum TaskPriorityType {
+  Low
+  Medium
+  High
+
+  @@map("task_priority")
+}
+
+enum TaskStatusType {
+  ToDo
+  InProgress
+  Closed
+  Frozen
+
+  @@map("task_status")
 }
 
 // Necessary for Next auth

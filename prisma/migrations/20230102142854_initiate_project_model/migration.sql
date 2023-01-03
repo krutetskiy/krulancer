@@ -4,6 +4,8 @@ CREATE TABLE "project" (
     "name" TEXT NOT NULL,
     "started_at" DATE NOT NULL,
     "planned_end" DATE NOT NULL,
+    "description" TEXT,
+    "started_by" TEXT,
 
     CONSTRAINT "project_pkey" PRIMARY KEY ("id")
 );

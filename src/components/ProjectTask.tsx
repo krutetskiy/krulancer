@@ -1,3 +1,4 @@
+import { TaskPriorityType } from "@prisma/client";
 import { Component } from "react";
 
 export enum PriorityType {
@@ -26,16 +27,16 @@ export interface IProps {
     title: string,
     assigned: string,
     estimated: number,
-    priority: PriorityType
+    priority: TaskPriorityType
 }
 
 const ProjectTask = (props: IProps) => {
     const { title, assigned, estimated, priority } = props
 
-    const priorityColor = new Map<PriorityType, string>([
-        [PriorityType.Low, "#67CB65"],
-        [PriorityType.Medium, "#FF9533"],
-        [PriorityType.High, "#E74444"],
+    const priorityColor = new Map<TaskPriorityType, string>([
+        [TaskPriorityType.Low, "#67CB65"],
+        [TaskPriorityType.Medium, "#FF9533"],
+        [TaskPriorityType.High, "#E74444"],
     ])
 
     return (

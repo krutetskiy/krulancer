@@ -1,28 +1,29 @@
 interface IProps {
   startedAt: Date | undefined,
   plannedEnd: Date | undefined,
-  starteBy: string | undefined,
+  startedBy: string | null | undefined,
+  description: string | null | undefined
 }
 
-const ProjectDashboardDescription = ({ startedAt, plannedEnd, starteBy }: IProps) => {
+const ProjectDashboardDescription = ({ startedAt, plannedEnd, startedBy, description }: IProps) => {
   return (
     <>
       <div className="flex justify-between mx-9">
         <div className="flex flex-col bg-bg-gray-regular px-5 py-3 font-medium min-h-[100px] w-1/6 rounded-2xl">
           <div className="flex justify-between">
-            <div className="flex font-mono">Date start:</div>
+            <div className="flex font-mono">Started at:</div>
             <div className="flex font-mono">{startedAt?.toLocaleDateString()}</div>
           </div>
           <div className="flex justify-between">
-            <div className="flex font-mono">Date end:</div>
+            <div className="flex font-mono">Planned end:</div>
             <div className="flex font-mono">{plannedEnd?.toLocaleDateString()}</div>
           </div>
           <div className="flex justify-between">
-            <div className="flex font-mono">Started by {starteBy}</div>
+            <div className="flex font-mono">Started by {startedBy}</div>
           </div>
         </div>
         <div className="flex bg-bg-gray-regular px-5 py-3 min-h-[100px] w-3/5 rounded-2xl">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum perferendis eum reprehenderit natus dolores molestiae consequuntur hic consectetur culpa, debitis quas ducimus placeat incidunt aliquid sunt dolore magnam, a provident.
+          {description}
         </div>
         <div className="flex flex-col bg-bg-gray-regular px-5 py-3 min-h-[100px] w-1/6 rounded-2xl">
           <div className="flex justify-between">

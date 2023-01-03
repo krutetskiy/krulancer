@@ -3,13 +3,6 @@ import { z } from "zod";
 import { router, publicProcedure } from "../trpc";
 
 export const projectRouter = router({
-  hello: publicProcedure
-    .input(z.object({ text: z.string().nullish() }).nullish())
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input?.text ?? "world"}`,
-      };
-    }),
   getById: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {
@@ -19,4 +12,13 @@ export const projectRouter = router({
         },
       });
     }),
+  getTasks: publicProcedure
+    .input(z.object({ project_id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.prisma.tasks.findMany({
+        where: {
+          project_id: input.project_id,
+        }
+      })
+    })
 });
