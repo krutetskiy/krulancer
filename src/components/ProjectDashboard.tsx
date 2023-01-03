@@ -2,7 +2,7 @@ import ProjectDashboardDescription from "./ProjectDashboardDescription";
 import ProjectDashboardTaskContainer from "./ProjectDashboardTaskContainer";
 import { DraggableData, DraggableEvent } from "react-draggable";
 import { trpc } from "../utils/trpc";
-import { tasks, TaskStatusType } from "@prisma/client";
+import { Task, TaskStatusType } from "@prisma/client";
 import { useState } from "react";
 
 const MouseOverlap = (mouseEvent: MouseEvent, bounds: DOMRect) => {
@@ -33,10 +33,10 @@ const ProjectDashboard = () => {
         id: 1
     }).data
 
-    const [dragTask, setDragTask] = useState<tasks>();
+    const [dragTask, setDragTask] = useState<Task>();
 
     trpc.tasks.updateTaskStatus.useQuery({
-        task_id: dragTask?.id,
+        taskId: dragTask?.id,
         status: dragTask?.status
     })
 
@@ -75,9 +75,9 @@ const ProjectDashboard = () => {
             <div className="flex flex-col min-h-screen">
                 <h1 className="flex m-9 font-mono font-semibold text-4xl">{project?.name ?? 'Unknown'}</h1>
                 <ProjectDashboardDescription
-                    startedAt={project?.started_at}
-                    plannedEnd={project?.planned_end}
-                    startedBy={project?.started_by}
+                    startedAt={project?.startedAt}
+                    plannedEnd={project?.plannedEnd}
+                    startedBy={project?.startedBy}
                     description={project?.description} />
                 <div id="taskContainers" className="flex justify-between m-9">
                     {

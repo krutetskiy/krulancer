@@ -1,4 +1,4 @@
-import { tasks } from "@prisma/client";
+import { Task } from "@prisma/client";
 import { createRef } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import ProjectTask from "./ProjectTask";
@@ -7,7 +7,7 @@ import { TaskStatusType } from "@prisma/client";
 export interface IProps {
     title: string,
     status: TaskStatusType,
-    tasks: tasks[] | undefined,
+    tasks: Task[] | undefined,
     onDraggingTask: (e: DraggableEvent, data: DraggableData) => void,
     onStopDragTask: (e: DraggableEvent, data: DraggableData) => void
 }

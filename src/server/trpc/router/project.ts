@@ -1,4 +1,3 @@
-import { TaskStatusType } from "@prisma/client";
 import { z } from "zod";
 
 import { router, publicProcedure } from "../trpc";
@@ -7,7 +6,7 @@ export const projectRouter = router({
     getById: publicProcedure
         .input(z.object({ id: z.number() }))
         .query(({ ctx, input }) => {
-            return ctx.prisma.projects.findFirst({
+            return ctx.prisma.project.findFirst({
                 where: {
                     id: input.id,
                 },
@@ -17,11 +16,11 @@ export const projectRouter = router({
             });
         }),
     getTasks: publicProcedure
-        .input(z.object({ project_id: z.number() }))
+        .input(z.object({ projectId: z.number() }))
         .query(({ ctx, input }) => {
-            return ctx.prisma.tasks.findMany({
+            return ctx.prisma.task.findMany({
                 where: {
-                    project_id: input.project_id,
+                    projectId: input.projectId,
                 }
             })
         })

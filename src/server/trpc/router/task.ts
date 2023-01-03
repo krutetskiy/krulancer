@@ -7,16 +7,16 @@ export const taskRouter = router({
     updateTaskStatus: publicProcedure
         .input(z.object(
             {
-                task_id: z.number().nullish(),
+                taskId: z.number().nullish(),
                 status: z.enum([TaskStatusType.ToDo, TaskStatusType.InProgress, TaskStatusType.Closed, TaskStatusType.Frozen]).nullish()
             }))
         .query(({ ctx, input }) => {
-            if (!input.task_id || !input.status)
+            if (!input.taskId || !input.status)
                 return null
 
-            return ctx.prisma.tasks.update({
+            return ctx.prisma.task.update({
                 where: {
-                    id: input.task_id
+                    id: input.taskId
                 },
                 data: {
                     status: input.status
