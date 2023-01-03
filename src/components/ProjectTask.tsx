@@ -1,27 +1,4 @@
 import { TaskPriorityType } from "@prisma/client";
-import { Component } from "react";
-
-export enum PriorityType {
-    Low = "Low",
-    Medium = "Medium",
-    High = "High"
-}
-
-export enum StatusType {
-    ToDo = "To Do",
-    InProgress = "In Progress",
-    Closed = "Closed",
-    Frozen = "Frozen"
-}
-
-export interface ProjectTaskModel {
-    id?: number,
-    title: string,
-    assigned: string,
-    estimated: number,
-    priority: PriorityType,
-    status: StatusType
-}
 
 export interface IProps {
     title: string,

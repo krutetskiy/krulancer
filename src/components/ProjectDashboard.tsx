@@ -2,7 +2,8 @@ import ProjectDashboardDescription from "./ProjectDashboardDescription";
 import ProjectDashboardTaskContainer from "./ProjectDashboardTaskContainer";
 import { DraggableData, DraggableEvent } from "react-draggable";
 import { trpc } from "../utils/trpc";
-import { TaskStatusType } from "@prisma/client";
+import { tasks, TaskStatusType } from "@prisma/client";
+import { useState } from "react";
 
 const MouseOverlap = (mouseEvent: MouseEvent, bounds: DOMRect) => {
     return (
@@ -13,19 +14,6 @@ const MouseOverlap = (mouseEvent: MouseEvent, bounds: DOMRect) => {
     )
 }
 
-const сontainerIdToStatus = (id: string): TaskStatusType | undefined => {
-    switch (id) {
-        case "To Do":
-            return TaskStatusType.ToDo;
-        case "In Progress":
-            return TaskStatusType.InProgress;
-        case "Closed":
-            return TaskStatusType.Closed;
-        case "Frozen":
-            return TaskStatusType.Frozen;
-    }
-}
-
 const displayStatuses = new Map<TaskStatusType, string>([
     [TaskStatusType.ToDo, "To Do"],
     [TaskStatusType.InProgress, "In Progress"],
@@ -33,14 +21,24 @@ const displayStatuses = new Map<TaskStatusType, string>([
     [TaskStatusType.Frozen, "Frozen"]
 ]);
 
+const stringStatusMap = new Map<string, TaskStatusType>([
+    [TaskStatusType.ToDo, TaskStatusType.ToDo],
+    [TaskStatusType.InProgress, TaskStatusType.InProgress],
+    [TaskStatusType.Closed, TaskStatusType.Closed],
+    [TaskStatusType.Frozen, TaskStatusType.Frozen]
+]);
+
 const ProjectDashboard = () => {
     const project = trpc.projects.getById.useQuery({
         id: 1
-    }).data;
+    }).data
 
-    const tasks = trpc.projects.getTasks.useQuery({
-        project_id: 1
-    }).data;
+    const [dragTask, setDragTask] = useState<tasks>();
+
+    trpc.tasks.updateTaskStatus.useQuery({
+        task_id: dragTask?.id,
+        status: dragTask?.status
+    })
 
     const onDraggingTask = (e: DraggableEvent, data: DraggableData): void => {
         const containers = [...document.querySelector("#taskContainers")?.children!];
@@ -59,19 +57,15 @@ const ProjectDashboard = () => {
         const containers = [...document.querySelector("#taskContainers")?.children!];
         const mouseEvent = window.event as MouseEvent;
 
-        const target = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
-        const status = сontainerIdToStatus(target?.id!);
+        const targetElement = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
+        const targetStatus: TaskStatusType | undefined = stringStatusMap.get(targetElement!.id);
 
-        if (!status) return
+        if (!targetStatus) return
 
-        const updatedTasks = tasks!.map(task => {
-            // if (task.id?.toString() === data.node.id)
-            //     task.status = status
+        const targetTask = project?.tasks?.find(task => task.id?.toString() === data.node.id)
+        targetTask!.status = targetStatus;
 
-            return task;
-        })
-
-        // setTasks(updatedTasks)
+        setDragTask(targetTask)
 
         containers.forEach(container => container.classList.remove("border-cyan-500"))
     }
@@ -92,7 +86,7 @@ const ProjectDashboard = () => {
                                 key={status}
                                 title={title}
                                 status={status}
-                                tasks={tasks?.filter(c => c.status === status)}
+                                tasks={project?.tasks?.filter(c => c.status === status)}
                                 onDraggingTask={onDraggingTask}
                                 onStopDragTask={onStopDragTask} />
                         })
