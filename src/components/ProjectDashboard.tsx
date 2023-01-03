@@ -21,7 +21,7 @@ const displayStatuses = new Map<TaskStatusType, string>([
     [TaskStatusType.Frozen, "Frozen"]
 ]);
 
-const stringStatusMap = new Map<string, TaskStatusType>([
+const statusTypeNames = new Map<string, TaskStatusType>([
     [TaskStatusType.ToDo, TaskStatusType.ToDo],
     [TaskStatusType.InProgress, TaskStatusType.InProgress],
     [TaskStatusType.Closed, TaskStatusType.Closed],
@@ -58,14 +58,15 @@ const ProjectDashboard = () => {
         const mouseEvent = window.event as MouseEvent;
 
         const targetElement = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
-        const targetStatus: TaskStatusType | undefined = stringStatusMap.get(targetElement!.id);
+        const targetStatus: TaskStatusType | undefined = statusTypeNames.get(targetElement!.id);
 
         if (!targetStatus) return
 
         const targetTask = project?.tasks?.find(task => task.id?.toString() === data.node.id)
-        targetTask!.status = targetStatus;
-
-        setDragTask(targetTask)
+        if (targetTask!.status !== targetStatus) {
+            targetTask!.status = targetStatus;
+            setDragTask(targetTask)
+        }
 
         containers.forEach(container => container.classList.remove("border-cyan-500"))
     }
