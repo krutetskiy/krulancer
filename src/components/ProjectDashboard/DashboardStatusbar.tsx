@@ -1,7 +1,7 @@
 import { Task } from "@prisma/client";
 import { createRef } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-import ProjectTask from "./ProjectTask";
+import ProjectTask from "./Task";
 import { TaskStatusType } from "@prisma/client";
 
 export interface IProps {

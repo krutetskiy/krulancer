@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import Header from "../components/Header"
-import ProjectDashboard from "../components/ProjectDashboard";
+import ProjectDashboard from "../components/ProjectDashboard/Dashboard";
 
 const Home: NextPage = () => {
   return (

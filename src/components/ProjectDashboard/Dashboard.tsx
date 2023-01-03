@@ -1,7 +1,7 @@
-import ProjectDashboardDescription from "./ProjectDashboardDescription";
-import ProjectDashboardTaskContainer from "./ProjectDashboardTaskContainer";
+import ProjectDashboardDescription from "./DashboardDescription";
+import ProjectDashboardTaskContainer from "./DashboardStatusbar";
 import { DraggableData, DraggableEvent } from "react-draggable";
-import { trpc } from "../utils/trpc";
+import { trpc } from "../../utils/trpc";
 import { Task, TaskStatusType } from "@prisma/client";
 import { useState } from "react";
 
