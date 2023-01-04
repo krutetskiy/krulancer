@@ -4,6 +4,7 @@ import { DraggableData, DraggableEvent } from "react-draggable";
 import { trpc } from "../../utils/trpc";
 import { Task, TaskStatusType } from "@prisma/client";
 import { useState } from "react";
+import CreateTaskForm from "../Task/CreateTaskForm";
 
 const MouseOverlap = (mouseEvent: MouseEvent, bounds: DOMRect) => {
     return (
@@ -35,6 +36,10 @@ const ProjectDashboard = () => {
 
     const [dragTask, setDragTask] = useState<Task>();
     const [activeStatusbar, setActiveStatusbar] = useState<string>()
+    const [createTask, setCreateTask] = useState<{ task: Task | undefined, isCreate: boolean }>({
+        task: undefined,
+        isCreate: false
+    })
 
     trpc.tasks.updateTaskStatus.useQuery({
         taskId: dragTask?.id,
@@ -57,11 +62,18 @@ const ProjectDashboard = () => {
         const mouseEvent = window.event as MouseEvent;
 
         const targetElement = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
+
+        if (!targetElement) {
+            setActiveStatusbar(undefined)
+            return
+        }
+
         const targetStatus: TaskStatusType | undefined = statusTypeNames.get(targetElement!.id);
 
         if (!targetStatus) return
 
         const targetTask = project?.tasks?.find(task => task.id?.toString() === data.node.id)
+
         if (targetTask!.status !== targetStatus) {
             targetTask!.status = targetStatus;
             setDragTask(targetTask)
@@ -70,10 +82,20 @@ const ProjectDashboard = () => {
         setActiveStatusbar(() => undefined)
     }
 
+    const handleOpenCreateForm = (): void => setCreateTask({ task: undefined, isCreate: true })
+
+    const handleCloseCreateForm = (): void => setCreateTask({ task: undefined, isCreate: false })
+
+    const handleSaveTask = (): void => console.log("Save")
+
     return (
         <>
+            {
+                createTask.isCreate ? <CreateTaskForm onCloseForm={handleCloseCreateForm} onSave={handleSaveTask} /> : <></>
+            }
+            <div className=""></div>
             <div className="flex flex-col min-h-screen">
-                <h1 className="flex m-9 font-mono font-semibold text-4xl">{project?.name ?? 'Unknown'}</h1>
+                <h1 className="flex m-9 font-mono font-semibold text-4xl">{project?.name}</h1>
                 <ProjectDashboardDescription
                     startedAt={project?.startedAt}
                     plannedEnd={project?.plannedEnd}
@@ -89,7 +111,8 @@ const ProjectDashboard = () => {
                                 isActive={status.toString() === activeStatusbar}
                                 tasks={project?.tasks?.filter(c => c.status === status)}
                                 onDraggingTask={onDraggingTask}
-                                onStopDragTask={onStopDragTask} />
+                                onStopDragTask={onStopDragTask}
+                                onCreateTask={handleOpenCreateForm} />
                         })
                     }
                 </div>

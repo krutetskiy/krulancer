@@ -9,7 +9,7 @@ const ProjectDashboardDescription = ({ startedAt, plannedEnd, startedBy, descrip
   return (
     <>
       <div className="flex justify-between mx-9">
-        <div className="flex flex-col bg-bg-gray-regular px-5 py-3 font-medium min-h-[100px] w-1/6 rounded-2xl">
+        <div className="flex flex-col bg-gray-regular-1 px-5 py-3 font-medium min-h-[100px] w-1/6 rounded-2xl">
           <div className="flex justify-between">
             <div className="flex font-mono">Started at:</div>
             <div className="flex font-mono">{startedAt?.toLocaleDateString()}</div>
@@ -22,10 +22,10 @@ const ProjectDashboardDescription = ({ startedAt, plannedEnd, startedBy, descrip
             <div className="flex font-mono">Started by {startedBy}</div>
           </div>
         </div>
-        <div className="flex bg-bg-gray-regular px-5 py-3 min-h-[100px] w-3/5 rounded-2xl">
+        <div className="flex bg-gray-regular-1 px-5 py-3 min-h-[100px] w-3/5 rounded-2xl">
           {description}
         </div>
-        <div className="flex flex-col bg-bg-gray-regular px-5 py-3 min-h-[100px] w-1/6 rounded-2xl">
+        <div className="flex flex-col bg-gray-regular-1 px-5 py-3 min-h-[100px] w-1/6 rounded-2xl">
           <div className="flex justify-between">
             <div className="flex font-mono">All tasks:</div>
             <div className="flex font-mono">12</div>
