@@ -10,7 +10,7 @@ export const taskRouter = router({
                 taskId: z.number().nullish(),
                 status: z.enum([TaskStatusType.ToDo, TaskStatusType.InProgress, TaskStatusType.Closed, TaskStatusType.Frozen]).nullish()
             }))
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             if (!input.taskId || !input.status)
                 return null
 

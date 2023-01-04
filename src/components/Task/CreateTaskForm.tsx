@@ -4,7 +4,6 @@ import { trpc } from "../../utils/trpc";
 
 interface IProps {
     onCloseForm(): void;
-    onSave(): void;
 }
 
 const priorityTypeMap = new Map<string, TaskPriorityType>([
@@ -13,7 +12,7 @@ const priorityTypeMap = new Map<string, TaskPriorityType>([
     [TaskPriorityType.High, TaskPriorityType.High],
 ])
 
-const CreateTaskForm = ({ onCloseForm, onSave }: IProps) => {
+const CreateTaskForm = ({ onCloseForm }: IProps) => {
     const [title, setTitle] = useState<string>("")
     const [assigned, setAssigned] = useState<string>("")
     const [estimated, setEstimated] = useState<number>(0)
@@ -38,8 +37,6 @@ const CreateTaskForm = ({ onCloseForm, onSave }: IProps) => {
         setAssigned("")
         setEstimated(0)
         setPriority(undefined)
-
-        onSave()
     }
 
     const handleTitleInput = (event: FormEvent<HTMLInputElement>) => setTitle(event.currentTarget.value)

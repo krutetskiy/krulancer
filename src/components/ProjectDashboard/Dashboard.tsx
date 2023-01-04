@@ -32,19 +32,12 @@ const statusTypeNames = new Map<string, TaskStatusType>([
 const ProjectDashboard = () => {
     const project = trpc.projects.getById.useQuery({
         id: 1
-    }).data
+    })
 
-    const [dragTask, setDragTask] = useState<Task>();
     const [activeStatusbar, setActiveStatusbar] = useState<string>()
-    const [createTask, setCreateTask] = useState<{ task: Task | undefined, isCreate: boolean }>({
-        task: undefined,
-        isCreate: false
-    })
+    const [showForm, setShowCreateTaskForm] = useState<boolean>(false)
 
-    trpc.tasks.updateTaskStatus.useQuery({
-        taskId: dragTask?.id,
-        status: dragTask?.status
-    })
+    const mutateChangeTaskStatus = trpc.tasks.updateTaskStatus.useMutation()
 
     const onDraggingTask = (e: DraggableEvent, data: DraggableData): void => {
         const containers = [...document.querySelector("#taskContainers")?.children!] as HTMLElement[];
@@ -72,35 +65,38 @@ const ProjectDashboard = () => {
 
         if (!targetStatus) return
 
-        const targetTask = project?.tasks?.find(task => task.id?.toString() === data.node.id)
+        const targetTask = project.data?.tasks?.find(task => task.id?.toString() === data.node.id)
 
         if (targetTask!.status !== targetStatus) {
-            targetTask!.status = targetStatus;
-            setDragTask(targetTask)
+            mutateChangeTaskStatus.mutate(
+                {
+                    taskId: targetTask?.id,
+                    status: targetStatus
+                },
+                {
+                    onSuccess: (data: Task | null) => project.refetch()
+                })
         }
 
         setActiveStatusbar(() => undefined)
     }
 
-    const handleOpenCreateForm = (): void => setCreateTask({ task: undefined, isCreate: true })
+    const handleOpenCreateForm = (): void => setShowCreateTaskForm(true)
 
-    const handleCloseCreateForm = (): void => setCreateTask({ task: undefined, isCreate: false })
-
-    const handleSaveTask = (): void => console.log("Save")
+    const handleCloseCreateForm = (): void => setShowCreateTaskForm(false)
 
     return (
         <>
             {
-                createTask.isCreate ? <CreateTaskForm onCloseForm={handleCloseCreateForm} onSave={handleSaveTask} /> : <></>
+                showForm ? <CreateTaskForm onCloseForm={handleCloseCreateForm} /> : <></>
             }
-            <div className=""></div>
             <div className="flex flex-col min-h-screen">
-                <h1 className="flex m-9 font-mono font-semibold text-4xl">{project?.name}</h1>
+                <h1 className="flex m-9 font-mono font-semibold text-4xl">{project.data?.name}</h1>
                 <ProjectDashboardDescription
-                    startedAt={project?.startedAt}
-                    plannedEnd={project?.plannedEnd}
-                    startedBy={project?.startedBy}
-                    description={project?.description} />
+                    startedAt={project.data?.startedAt}
+                    plannedEnd={project.data?.plannedEnd}
+                    startedBy={project.data?.startedBy}
+                    description={project.data?.description} />
                 <div id="taskContainers" className="flex justify-between m-9">
                     {
                         Array.from(displayStatuses).map(([status, title]) => {
@@ -109,7 +105,7 @@ const ProjectDashboard = () => {
                                 title={title}
                                 status={status}
                                 isActive={status.toString() === activeStatusbar}
-                                tasks={project?.tasks?.filter(c => c.status === status)}
+                                tasks={project.data?.tasks?.filter(c => c.status === status)}
                                 onDraggingTask={onDraggingTask}
                                 onStopDragTask={onStopDragTask}
                                 onCreateTask={handleOpenCreateForm} />
