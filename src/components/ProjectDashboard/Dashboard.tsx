@@ -83,7 +83,10 @@ const ProjectDashboard = () => {
 
     const handleOpenCreateForm = (): void => setShowCreateTaskForm(true)
 
-    const handleCloseCreateForm = (): void => setShowCreateTaskForm(false)
+    const handleCloseCreateForm = (): void => {
+        project.refetch()
+        setShowCreateTaskForm(false)
+    }
 
     return (
         <>
