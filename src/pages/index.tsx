@@ -19,12 +19,14 @@ const Home: NextPage = () => {
   })
 
   const handleCredentialSignUp = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     mutateCredits.mutate({ login: credits.login, password: credits.password })
     handleCredentialSignIn(e)
   }
 
   const handleCredentialSignIn = (e: FormEvent<HTMLButtonElement>) => {
-    signIn("credentials", { callbackUrl: "/dashboard", redirect: true, email: credits.login, password: credits.password })
+    e.preventDefault()
+    signIn("credentials", { callbackUrl: "/dashboard", email: credits.login, password: credits.password })
   }
 
   return (
@@ -37,8 +39,8 @@ const Home: NextPage = () => {
         <div className="flex flex-col p-20 rounded-2xl w-[600px] h-[700px] bg-gray-regular-1">
           <h1 className="font-mono self-center font-medium text-4xl tracking-widest">KRULANCER</h1>
           <form className="flex flex-col mt-12 mb-4">
-            <input value={"kingsemyn@gmail.com"} onChange={handleLoginInput} placeholder="Username" className="text-xl rounded-2xl px-4 py-2 w-full border-2 hover:border-blue-500 bg-gray-regular-1" type="text" />
-            <input value={"pwdpwdpwd"} onChange={handlePasswordInput} placeholder="Password" className="text-xl rounded-2xl px-4 py-2 my-3 w-full border-2 hover:border-blue-500 bg-gray-regular-1" type="password" />
+            <input value={credits.login} onChange={handleLoginInput} placeholder="Username" className="text-xl rounded-2xl px-4 py-2 w-full border-2 hover:border-blue-500 bg-gray-regular-1" type="text" />
+            <input value={credits.password} onChange={handlePasswordInput} placeholder="Password" className="text-xl rounded-2xl px-4 py-2 my-3 w-full border-2 hover:border-blue-500 bg-gray-regular-1" type="password" />
             <div className="flex justify-between">
               <button onClick={handleCredentialSignUp} className="p-2 w-full text-2xl font-medium tracking-widest rounded-2xl bg-blue-500 text-white hover:border-blue-500 border-2 hover:bg-gray-regular-1 hover:text-black" type="submit">Sign Up</button>
               <button onClick={handleCredentialSignIn} className="p-2 w-full text-2xl font-medium tracking-widest rounded-2xl bg-blue-500 text-white hover:border-blue-500 border-2 hover:bg-gray-regular-1 hover:text-black" type="submit">Sign In</button>
