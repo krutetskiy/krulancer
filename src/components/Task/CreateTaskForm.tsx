@@ -1,9 +1,10 @@
-import { TaskPriorityType, Task } from "@prisma/client";
+import { TaskPriorityType } from "@prisma/client";
 import { FormEvent, useState } from "react";
 import { trpc } from "../../utils/trpc";
 
 interface IProps {
   onCloseForm(): void;
+  projectId: number
 }
 
 const priorityTypeMap = new Map<string, TaskPriorityType>([
@@ -12,7 +13,7 @@ const priorityTypeMap = new Map<string, TaskPriorityType>([
   [TaskPriorityType.High, TaskPriorityType.High],
 ])
 
-const CreateTaskForm = ({ onCloseForm }: IProps) => {
+const CreateTaskForm = ({ projectId, onCloseForm }: IProps) => {
   const [title, setTitle] = useState<string>("")
   const [assigned, setAssigned] = useState<string>("")
   const [estimated, setEstimated] = useState<number>(0)
@@ -30,7 +31,7 @@ const CreateTaskForm = ({ onCloseForm }: IProps) => {
       assigned: assigned,
       estimated: estimated,
       priority: priority!,
-      projectId: 1
+      projectId: projectId
     })
 
     setTitle("")

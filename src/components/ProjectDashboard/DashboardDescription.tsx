@@ -12,11 +12,11 @@ const ProjectDashboardDescription = ({ startedAt, plannedEnd, startedBy, descrip
         <div className="flex flex-col bg-gray-regular-1 px-5 py-3 font-medium min-h-[100px] w-1/6 rounded-2xl">
           <div className="flex justify-between">
             <div className="flex font-mono">Started at:</div>
-            <div className="flex font-mono">{startedAt?.toLocaleDateString()}</div>
+            <div className="flex font-mono">{startedAt?.toString().slice(0, 10)}</div>
           </div>
           <div className="flex justify-between">
             <div className="flex font-mono">Planned end:</div>
-            <div className="flex font-mono">{plannedEnd?.toLocaleDateString()}</div>
+            <div className="flex font-mono">{plannedEnd?.toString().slice(0, 10)}</div>
           </div>
           <div className="flex justify-between">
             <div className="flex font-mono">Started by {startedBy}</div>

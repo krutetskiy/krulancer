@@ -1,16 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
@@ -20,8 +13,9 @@ model Project {
   startedAt   DateTime @map("started_at") @db.Date
   plannedEnd  DateTime @map("planned_end") @db.Date
   description String
-  startedBy   String   @map("started_by")
   tasks       Task[]
+  startedById String
+  startedBy   User     @relation(fields: [startedById], references: [id])
 
   @@map("project")
 }
@@ -87,11 +81,11 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
-  password      String
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Project       Project[]
 }
 
 model VerificationToken {
