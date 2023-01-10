@@ -1,7 +1,18 @@
 import { type NextPage } from "next";
 import { signIn } from "next-auth/react";
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const session = useSession()
+
+  useEffect(() => {
+    if (session.status === 'authenticated')
+      router.push("/profile")
+  })
+
   return (
     <>
       <div className="flex flex-col justify-center items-center w-screen h-screen bg-gray-regular-2">
