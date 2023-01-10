@@ -18,6 +18,7 @@ const CreateTaskForm = ({ projectId, onCloseForm }: IProps) => {
   const [assigned, setAssigned] = useState<string>("")
   const [estimated, setEstimated] = useState<number>(0)
   const [priority, setPriority] = useState<TaskPriorityType>()
+  const [description, setDescription] = useState<string>("")
 
   const mutation = trpc.tasks.createTask.useMutation()
 
@@ -31,19 +32,22 @@ const CreateTaskForm = ({ projectId, onCloseForm }: IProps) => {
       assigned: assigned,
       estimated: estimated,
       priority: priority!,
-      projectId: projectId
+      projectId: projectId,
+      describtion: description
     })
 
     setTitle("")
     setAssigned("")
     setEstimated(0)
     setPriority(undefined)
+    setDescription("")
   }
 
   const handleTitleInput = (event: FormEvent<HTMLInputElement>) => setTitle(event.currentTarget.value)
   const handleAssignedInput = (event: FormEvent<HTMLInputElement>) => setAssigned(event.currentTarget.value)
   const handleEstimatedInput = (event: FormEvent<HTMLInputElement>) => setEstimated(+event.currentTarget.value)
   const handlePriorityInput = (event: FormEvent<HTMLSelectElement>) => setPriority(priorityTypeMap.get(event.currentTarget.value))
+  const handleDescribtionInput = (event: FormEvent<HTMLTextAreaElement>) => setDescription(event.currentTarget.value)
 
   return (
     <>
@@ -55,19 +59,19 @@ const CreateTaskForm = ({ projectId, onCloseForm }: IProps) => {
               <svg className="h-6 w-6 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <circle cx="12" cy="12" r="10" />  <line x1="15" y1="9" x2="9" y2="15" />  <line x1="9" y1="9" x2="15" y2="15" /></svg>
             </button>
           </div>
-          <div className="flex justify-between pr-10 pt-3">
+          <div className="flex justify-between mr-10 mt-3">
             <h3 className="py-2 px-5 mr-2 w-1/5 text-center font-mono font-medium tracking-wider bg-gray-regular-1 rounded-2xl">Title</h3>
             <input value={title} onChange={handleTitleInput} className="rounded-2xl px-4 w-full border hover:border-blue-500 bg-gray-regular-1" type="text" />
           </div>
-          <div className="flex justify-between pr-10 pt-3">
+          <div className="flex justify-between mr-10 mt-3">
             <h3 className="py-2 px-5 mr-2 w-2/5 text-center font-mono font-medium tracking-wider bg-gray-regular-1 rounded-2xl">Assigned</h3>
             <input value={assigned} onChange={handleAssignedInput} className="rounded-2xl px-4 w-full border hover:border-blue-500 bg-gray-regular-1" type="text" />
           </div>
-          <div className="flex justify-between pr-10 pt-3">
+          <div className="flex justify-between mr-10 mt-3">
             <h3 className="py-2 px-5 mr-2 w-5/9 text-center font-mono font-medium tracking-wider bg-gray-regular-1 rounded-2xl">Estimated</h3>
             <input value={estimated} onChange={handleEstimatedInput} className="rounded-2xl px-4 w-full border hover:border-blue-500 bg-gray-regular-1" type="number" />
           </div>
-          <div className="flex justify-between pr-10 pt-3">
+          <div className="flex justify-between mr-10 mt-3">
             <select onChange={handlePriorityInput} className="py-2 px-5 w-2/5 bg-gray-regular-1 border font-mono font-medium tracking-wider border-gray-300 rounded-2xl block">
               <option defaultValue="">Select a priority</option>
               <option value="Low">Low</option>
@@ -75,7 +79,7 @@ const CreateTaskForm = ({ projectId, onCloseForm }: IProps) => {
               <option value="High">High</option>
             </select>
           </div>
-
+          <textarea onChange={handleDescribtionInput} value={description} className="mr-10 mt-3 rounded-2xl py-2 px-5 h-full bg-gray-regular-1" placeholder="Describtion..."></textarea>
           <button className="py-2 px-5 mt-5 w-2/3 self-center bg-gray-regular-1 border hover:border-blue-500 font-mono font-medium tracking-wider rounded-2xl" type="submit">Save</button>
         </form>
       </div>

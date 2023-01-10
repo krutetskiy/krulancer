@@ -27,6 +27,7 @@ export const taskRouter = router({
     .input(z.object(
       {
         title: z.string().min(1).max(100),
+        describtion: z.string().min(1).max(500),
         assigned: z.string().min(1).max(20),
         estimated: z.number().min(0).max(100),
         priority: z.enum([TaskPriorityType.Low, TaskPriorityType.Medium, TaskPriorityType.High]),
@@ -42,7 +43,7 @@ export const taskRouter = router({
           priority: input.priority,
           status: TaskStatusType.ToDo,
           projectId: input.projectId,
-          description: "Empty" // TODO 
+          description: input.describtion
         }
       })
     })
