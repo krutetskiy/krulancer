@@ -5,7 +5,7 @@ interface IProps {
   projects: (Project & { startedBy: User })[]
 }
 
-const ProfileProjects = ({ projects }: IProps) => {
+const ProjectsWidget = ({ projects }: IProps) => {
   return (
     <>
       <div className="flex flex-col rounded-2xl bg-gray-regular-1 p-6">
@@ -13,7 +13,7 @@ const ProfileProjects = ({ projects }: IProps) => {
         <div className="flex flex-col justify-between">
           {
             Array.from(projects).map((project, index) => {
-              return <ProfileProjectItem key={index} {...project} />
+              return <ProjectItem key={index} {...project} />
             })
           }
         </div>
@@ -22,7 +22,7 @@ const ProfileProjects = ({ projects }: IProps) => {
   )
 }
 
-const ProfileProjectItem = (project: (Project & { startedBy: User })) => {
+const ProjectItem = (project: (Project & { startedBy: User })) => {
   return (
     <>
       <Link href={`/project/${project.id}`} className="flex my-1 rounded-2xl bg-gray-regular-2 transform transition duration-300 hover:scale-[1.03] p-3 w-full">
@@ -50,4 +50,4 @@ const ProfileProjectItem = (project: (Project & { startedBy: User })) => {
   )
 }
 
-export default ProfileProjects;
+export default ProjectsWidget;

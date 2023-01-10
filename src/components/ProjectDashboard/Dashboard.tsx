@@ -95,14 +95,10 @@ const ProjectDashboard = ({ project, startedBy }: IProps) => {
       {
         showForm ? <CreateTaskForm projectId={project.id} onCloseForm={handleCloseCreateForm} /> : <></>
       }
-      <div className="flex flex-col min-h-screen">
-        <h1 className="flex m-9 font-mono font-semibold text-4xl">{project?.name}</h1>
-        <ProjectDashboardDescription
-          startedAt={project?.startedAt}
-          plannedEnd={project?.plannedEnd}
-          startedBy={startedBy?.name}
-          description={project?.description} />
-        <div id="taskContainers" className="flex justify-between m-9">
+      <div className="flex flex-col min-h-screen mx-9">
+        <h1 className="flex my-5 font-mono font-semibold text-4xl">{project?.name}</h1>
+        <ProjectDashboardDescription {...project} startedBy={startedBy.name} tasks={tasks.data} />
+        <div id="taskContainers" className="flex justify-between mt-5">
           {
             Array.from(displayStatuses).map(([status, title]) => {
               return <ProjectDashboardTaskContainer

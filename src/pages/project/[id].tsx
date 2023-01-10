@@ -24,7 +24,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 }
 
-const Dashboard = (props: ServerSideProps) => {
+const DashboardPage = (props: ServerSideProps) => {
 
   return (
     <>
@@ -37,4 +37,4 @@ const Dashboard = (props: ServerSideProps) => {
   )
 }
 
-export default Dashboard;
+export default DashboardPage;

@@ -1,23 +1,17 @@
 import AuthGuard from "../components/AuthGuard";
 import Header from "../components/UI/Header";
 import Avatar from "../components/Profile/Avatar";
-import ProfileProjects from "../components/Profile/ProfileProjects";
 import { GetServerSidePropsContext } from "next";
 import { prisma } from "../server/db/client"
 import { Project, User } from "@prisma/client";
+import ProjectsWidget from "../components/Profile/ProjectsWidget";
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
   const sessionToken = req.cookies["next-auth.session-token"]
   const session = await prisma.session.findUnique({ where: { sessionToken: sessionToken }, include: { user: true } })
   const projects = await prisma.project.findMany({
-    where: {
-      startedBy: {
-        id: session?.userId
-      }
-    },
-    include: {
-      startedBy: true
-    }
+    where: { startedBy: { id: session?.userId } },
+    include: { startedBy: true }
   })
 
   return {
@@ -28,7 +22,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
   }
 }
 
-const Profile = ({ projects, user }: { projects: (Project & { startedBy: User })[], user: User }) => {
+const ProfilePage = ({ projects, user }: { projects: (Project & { startedBy: User })[], user: User }) => {
 
   return (
     <>
@@ -41,7 +35,7 @@ const Profile = ({ projects, user }: { projects: (Project & { startedBy: User })
             <Avatar />
           </div>
           <div className="flex flex-col w-full ml-3">
-            <ProfileProjects projects={projects} />
+            <ProjectsWidget projects={projects} />
           </div>
         </div>
       </main>
@@ -49,4 +43,4 @@ const Profile = ({ projects, user }: { projects: (Project & { startedBy: User })
   )
 }
 
-export default Profile;
+export default ProfilePage;

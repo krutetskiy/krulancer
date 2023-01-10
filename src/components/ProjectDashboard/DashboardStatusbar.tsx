@@ -67,11 +67,7 @@ const ProjectDashboardTaskContainer = ({ status, title, isActive, tasks, onDragg
                                 bounds="body"
                             >
                                 <div id={`${task.id}`} ref={nodeRef}>
-                                    <ProjectTask
-                                        title={task.title}
-                                        assigned={task.assigned}
-                                        estimated={task.estimated}
-                                        priority={task.priority} />
+                                    <ProjectTask {...task} />
                                 </div>
                             </Draggable>
                         )

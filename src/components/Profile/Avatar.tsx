@@ -5,7 +5,7 @@ const Avatar = () => {
     <>
       <div className="rounded-2xl bg-gray-regular-1 p-6">
         <div className="relative h-[400px] rounded-2xl">
-          <Image className="rounded-2xl" alt="#" src="/profile-image.jpeg" fill />
+          <Image className="rounded-2xl" alt="#" src="/profile-image.png" fill />
         </div>
       </div>
     </>

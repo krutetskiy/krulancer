@@ -1,25 +1,19 @@
-import { TaskPriorityType } from "@prisma/client";
+import { Task } from "@prisma/client";
+import PriorityLabel from "../UI/PriorityLabel";
+import Link from "next/link";
 
-export interface IProps {
-    title: string,
-    assigned: string,
-    estimated: number,
-    priority: TaskPriorityType
-}
-
-const priorityColorMap = new Map<string, string>([
-    [TaskPriorityType.Low, "bg-[#67CB65]"],
-    [TaskPriorityType.Medium, "bg-[#FF9533]"],
-    [TaskPriorityType.High, "bg-[#E74444]"],
-])
-
-const ProjectTask = ({ title, assigned, estimated, priority }: IProps) => {
+const ProjectTask = ({ id, title, assigned, estimated, priority }: Task) => {
     return (
         <>
             <div className="flex flex-col my-1 px-4 py-2 bg-gray-regular-2 rounded-2xl cursor-grab">
-                <div className="flex items-baseline mb-3">
+                <div className="flex justify-between items-baseline mb-3">
+                    <PriorityLabel priority={priority} />
+                    <Link href={`/project/task/${id}`} >
+                        <svg className="h-6 w-6 text-blue-500 justify-self-center" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5" />  <line x1="10" y1="14" x2="20" y2="4" />  <polyline points="15 4 20 4 20 9" /></svg>
+                    </Link>
+                </div>
+                <div className="flex justify-between items-baseline mb-3">
                     <h3 className="mr-2 font-mono font-medium">{title}</h3>
-                    <div className={`px-2 ${priorityColorMap.get(priority)} text-white rounded-2xl`}>{priority}</div>
                 </div>
                 <div className="flex justify-between">
                     <div className="flex font-mono font-medium text-gray-light-1">Assigned:</div>

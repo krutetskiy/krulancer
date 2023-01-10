@@ -1,14 +1,9 @@
 import { type NextPage } from "next";
-import Head from "next/head";
 import { signIn } from "next-auth/react";
 
 const Home: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>KRULANCER</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <div className="flex flex-col justify-center items-center w-screen h-screen bg-gray-regular-2">
         <div className="flex flex-col p-20 rounded-2xl w-[600px] h-[700px] bg-gray-regular-1">
           <h1 className="font-mono self-center font-medium text-4xl tracking-widest">KRULANCER</h1>

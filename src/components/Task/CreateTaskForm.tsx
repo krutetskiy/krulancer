@@ -47,7 +47,7 @@ const CreateTaskForm = ({ projectId, onCloseForm }: IProps) => {
 
   return (
     <>
-      <div className="absolute z-20 flex flex-col justify-center w-full h-full bg-slate-500 bg-opacity-60">
+      <div className="absolute z-20 flex flex-col justify-center w-screen h-screen bg-slate-500 bg-opacity-60">
         <form onSubmit={handleSave} className="flex flex-col self-center rounded-2xl p-4 top-1/4 h-1/2 w-2/5 bg-gray-regular-2">
           <div className="flex justify-between">
             <h2 className="ml-1 font-mono font-medium text-2xl text-start">Create task</h2>
