@@ -46,7 +46,7 @@ const ProjectDashboard = ({ project, startedBy }: IProps) => {
     const mouseEvent = window.event as MouseEvent;
 
     containers.forEach(container => {
-      var bounds = container.getBoundingClientRect()
+      const bounds = container.getBoundingClientRect()
       if (MouseOverlap(mouseEvent, bounds))
         setActiveStatusbar(() => container.id)
     })
