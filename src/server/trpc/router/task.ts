@@ -41,7 +41,8 @@ export const taskRouter = router({
           estimated: input.estimated,
           priority: input.priority,
           status: TaskStatusType.ToDo,
-          projectId: input.projectId
+          projectId: input.projectId,
+          description: "Empty" // TODO 
         }
       })
     })
