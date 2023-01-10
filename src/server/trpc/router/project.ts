@@ -8,7 +8,7 @@ export const projectRouter = router({
     .query(({ ctx, input }) => {
       return ctx.prisma.project.findMany({
         where: {
-          user: {
+          startedBy: {
             sessions: {
               some: {
                 sessionToken: input.userSession
