@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext } from "next";
-import { prisma } from "../../../server/db/client"
+import { prisma } from "../../server/db/client"
 import { Task } from "@prisma/client";
-import AuthGuard from "../../../components/AuthGuard";
-import Header from "../../../components/UI/Header";
-import HighlightProperty from "../../../components/UI/HighlightProperty";
-import PriorityLabel from "../../../components/UI/PriorityLabel";
+import AuthGuard from "../../components/AuthGuard";
+import Header from "../../components/UI/Header";
+import HighlightProperty from "../../components/UI/HighlightProperty";
+import PriorityLabel from "../../components/UI/PriorityLabel";
 
 export async function getServerSideProps({ req, params }: GetServerSidePropsContext) {
   const taskId = +(params!.id ?? -1)
