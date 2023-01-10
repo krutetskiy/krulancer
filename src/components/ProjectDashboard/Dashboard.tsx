@@ -42,7 +42,7 @@ const ProjectDashboard = ({ project, startedBy }: IProps) => {
   const mutateChangeTaskStatus = trpc.tasks.updateTaskStatus.useMutation()
 
   const onDraggingTask = (e: DraggableEvent, data: DraggableData): void => {
-    const containers = [...document.querySelector("#taskContainers")?.children!] as HTMLElement[];
+    const containers = [...document.querySelector("#taskContainers")!.children!] as HTMLElement[];
     const mouseEvent = window.event as MouseEvent;
 
     containers.forEach(container => {
@@ -53,7 +53,7 @@ const ProjectDashboard = ({ project, startedBy }: IProps) => {
   }
 
   const onStopDragTask = (e: DraggableEvent, data: DraggableData): void => {
-    const containers = [...document.querySelector("#taskContainers")?.children!] as HTMLElement[];
+    const containers = [...document.querySelector("#taskContainers")!.children!] as HTMLElement[];
     const mouseEvent = window.event as MouseEvent;
 
     const targetElement = containers.find(container => MouseOverlap(mouseEvent, container.getBoundingClientRect()))
