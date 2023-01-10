@@ -7,7 +7,7 @@ import { Project, User } from "@prisma/client";
 import ProjectsWidget from "../components/Profile/ProjectsWidget";
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
-  const sessionToken = req.cookies["next-auth.session-token"]
+  const sessionToken = req.cookies["__Secure-next-auth.session-token"]
   const session = await prisma.session.findUnique({ where: { sessionToken: sessionToken }, include: { user: true } })
   const projects = await prisma.project.findMany({
     where: { startedBy: { id: session?.userId } },
